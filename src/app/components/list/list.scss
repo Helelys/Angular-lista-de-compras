@@ -24,6 +24,7 @@
     color: var(--success-color);
 }
 
+/* Listas de compras */
 .shopping-list {
     list-style: none;
     padding: 0;
@@ -98,3 +99,14 @@
     flex-wrap: wrap;
 }
 
+.empty-message {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--dark-gray);
+    font-style: italic;
+    display: none;
+}
+
+.empty-message.visible {
+    display: block;
+}
