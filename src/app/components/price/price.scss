@@ -1,24 +1,33 @@
 .total-section {
-    background: linear-gradient(135deg, var(--success-color), #20A943);
-    padding: 20px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    margin-bottom: 20px;
-    color: var(--white);
+  background: linear-gradient(135deg, var(--success-color), #20A943);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+  color: var(--white);
 }
 
 .total-display {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .total-label {
-    font-size: 1.1rem;
-    font-weight: 500;
+  font-size: 1.1rem;
+  font-weight: 500;
 }
 
 .total-amount {
-    font-size: 1.5rem;
-    font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .total-display {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
 }
