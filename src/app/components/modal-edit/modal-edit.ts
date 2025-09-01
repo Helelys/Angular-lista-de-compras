@@ -27,12 +27,17 @@ export class ModalEdit implements OnInit, OnDestroy {
   constructor(private modalService: ModalService) {}
 
   ngOnInit(): void {
-    // Inscreve-se nos eventos de abertura do modal de edição
+    // Inscreve-se nos eventos de abertura/fechamento do modal de edição
     this.subscription.add(
-      this.modalService.editModal$.subscribe(data => {
-        if (data.result === null && data.item) {
-          // Abre o modal
-          this.openModal(data.item);
+      this.modalService.editModal$.subscribe(state => {
+        console.log('ModalEdit recebeu estado:', state); // Debug
+        
+        if (state.show && state.item && !this.showModal) {
+          // Abre o modal com os dados do item
+          this.openModal(state.item);
+        } else if (!state.show && this.showModal) {
+          // Fecha o modal
+          this.closeModal();
         }
       })
     );
@@ -43,11 +48,20 @@ export class ModalEdit implements OnInit, OnDestroy {
   }
 
   private openModal(item: ShoppingItem): void {
+    console.log('Abrindo modal de edição para:', item); // Debug
     this.currentItem = item;
     this.editName = item.name;
     this.editCategory = item.category as Category;
     this.editQuantity = item.quantity;
     this.showModal = true;
+
+    // Foca no primeiro input após um pequeno delay
+    setTimeout(() => {
+      const nameInput = document.getElementById('editItemName') as HTMLInputElement;
+      if (nameInput) {
+        nameInput.focus();
+      }
+    }, 100);
   }
 
   onSubmit(event: Event): void {
@@ -55,21 +69,35 @@ export class ModalEdit implements OnInit, OnDestroy {
     
     if (!this.currentItem) return;
 
+    // Validações
+    if (!this.editName.trim()) {
+      alert('Nome do item é obrigatório');
+      return;
+    }
+
+    if (!this.editCategory) {
+      alert('Categoria é obrigatória');
+      return;
+    }
+
+    if (this.editQuantity < 1) {
+      alert('Quantidade deve ser maior que zero');
+      return;
+    }
+
     const updatedData: EditModalData = {
       name: this.editName.trim(),
       category: this.editCategory,
       quantity: this.editQuantity
     };
 
-    this.modalService.closeEditModal(this.currentItem, updatedData);
-    this.closeModal();
+    console.log('Submetendo edição:', updatedData); // Debug
+    this.modalService.closeEditModal(updatedData);
   }
 
   onCancel(): void {
-    if (!this.currentItem) return;
-    
-    this.modalService.closeEditModal(this.currentItem, null);
-    this.closeModal();
+    console.log('Cancelando modal de edição'); // Debug
+    this.modalService.closeEditModal(null);
   }
 
   onClose(): void {
