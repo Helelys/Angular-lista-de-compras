@@ -1,11 +1,18 @@
 <header class="header">
     <h1>Lista de Compras</h1>
     <div class="header-actions">
-        <select id="sortSelect" class="sort-select">
+        <select 
+            [(ngModel)]="currentSort" 
+            (change)="onSortChange(currentSort)"
+            class="sort-select">
             <option value="name">Ordenar por Nome</option>
             <option value="category">Ordenar por Categoria</option>
             <option value="status">Ordenar por Status</option>
         </select>
-        <button id="clearAllBtn" class="btn btn-danger">Limpar Lista</button>
+        <button 
+            (click)="onClearAll()" 
+            class="btn btn-danger">
+            Limpar Lista
+        </button>
     </div>
 </header>

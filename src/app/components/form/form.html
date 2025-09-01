@@ -1,19 +1,30 @@
-<form id="addItemForm" class="add-item-form">
+<form class="add-item-form" (ngSubmit)="onSubmit($event)">
     <div class="form-row">
-        <input type="text" id="itemName" placeholder="Nome do item" maxlength="50" required>
-        <select id="itemCategory" required>
+        <input 
+            type="text" 
+            [(ngModel)]="itemName" 
+            name="itemName"
+            placeholder="Nome do item" 
+            maxlength="50" 
+            required>
+        <select 
+            [(ngModel)]="itemCategory" 
+            name="itemCategory"
+            required>
             <option value="">Categoria</option>
-            <option value="Frutas e Verduras">Frutas e Verduras</option>
-            <option value="Carnes">Carnes</option>
-            <option value="Laticínios">Laticínios</option>
-            <option value="Padaria">Padaria</option>
-            <option value="Limpeza">Limpeza</option>
-            <option value="Higiene">Higiene</option>
-            <option value="Outros">Outros</option>
+            <option *ngFor="let category of categories" [value]="category">
+                {{category}}
+            </option>
         </select>
-        </div>
-            <div class="form-row">
-            <input type="number" id="itemQuantity" placeholder="Quantidade" min="1" value="1" required>
-            <button type="submit" class="btn btn-primary">Adicionar</button>
-        </div>
+    </div>
+    <div class="form-row">
+        <input 
+            type="number" 
+            [(ngModel)]="itemQuantity" 
+            name="itemQuantity"
+            placeholder="Quantidade" 
+            min="1" 
+            required>
+        <button type="submit" class="btn btn-primary">Adicionar</button>
+    </div>
 </form>

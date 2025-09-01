@@ -1,3 +1,5 @@
+// src/app/app.ts
+
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './components/header/header';
@@ -6,7 +8,6 @@ import { Price } from "./components/price/price";
 import { List } from "./components/list/list";
 import { ModalEdit } from "./components/modal-edit/modal-edit";
 import { ModalPrice } from "./components/modal-price/modal-price";
-
 
 @Component({
   selector: 'app-root',
