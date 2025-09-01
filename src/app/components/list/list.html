@@ -1,16 +1,76 @@
 <div class="lists-container">
     <div class="list-section">
         <h2>Itens para Comprar</h2>
-        <ul id="pendingList" class="shopping-list"></ul>
-        <div id="emptyPendingMessage" class="empty-message">
-                    Nenhum item na lista
+        <ul class="shopping-list">
+            <li *ngFor="let item of pendingItems; trackBy: trackByFn" class="list-item" [attr.data-id]="item.id">
+                <div class="item-content">
+                    <div class="item-info">
+                        <div class="item-name">{{item.name}}</div>
+                        <div class="item-details">
+                            <span class="item-category">{{item.category}}</span>
+                            <span>Qtd: {{item.quantity}}</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button 
+                            (click)="onBuyItem(item)" 
+                            class="btn btn-success btn-small">
+                            Comprar
+                        </button>
+                        <button 
+                            (click)="onEditItem(item)" 
+                            class="btn btn-primary btn-small">
+                            Editar
+                        </button>
+                        <button 
+                            (click)="onDeleteItem(item)" 
+                            class="btn btn-danger btn-small">
+                            Excluir
+                        </button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="empty-message" [class.visible]="pendingItems.length === 0">
+            Nenhum item na lista
         </div>
     </div>
+    
     <div class="list-section bought-section">
         <h2>Itens Comprados</h2>
-        <ul id="boughtList" class="shopping-list bought-list"></ul>
-        <div id="emptyBoughtMessage" class="empty-message">
-                    Nenhum item comprado ainda
+        <ul class="shopping-list bought-list">
+            <li *ngFor="let item of boughtItems; trackBy: trackByFn" class="list-item" [attr.data-id]="item.id">
+                <div class="item-content">
+                    <div class="item-info">
+                        <div class="item-name">{{item.name}}</div>
+                        <div class="item-details">
+                            <span class="item-category">{{item.category}}</span>
+                            <span>Qtd: {{item.quantity}}</span>
+                            <span *ngIf="item.price > 0" class="item-price">R$ {{formatPrice(item.price)}}</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button 
+                            (click)="onUnbuyItem(item)" 
+                            class="btn btn-secondary btn-small">
+                            Desfazer
+                        </button>
+                        <button 
+                            (click)="onEditItem(item)" 
+                            class="btn btn-primary btn-small">
+                            Editar
+                        </button>
+                        <button 
+                            (click)="onDeleteItem(item)" 
+                            class="btn btn-danger btn-small">
+                            Excluir
+                        </button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="empty-message" [class.visible]="boughtItems.length === 0">
+            Nenhum item comprado ainda
         </div>
     </div>
 </div>

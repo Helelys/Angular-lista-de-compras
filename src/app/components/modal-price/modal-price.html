@@ -1,16 +1,24 @@
-<div id="priceModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Inserir Preço</h3>
-                <span class="close">&times;</span>
+<div *ngIf="showModal" class="modal" (click)="onBackdropClick($event)">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Inserir Preço</h3>
+            <span class="close" (click)="onClose()">&times;</span>
+        </div>
+        <form (ngSubmit)="onSubmit($event)">
+            <div class="form-group">
+                <label for="itemPrice">Preço pago (R$):</label>
+                <input 
+                    type="number" 
+                    id="itemPrice" 
+                    [(ngModel)]="price" 
+                    name="price"
+                    step="0.01" 
+                    min="0" 
+                    placeholder="0,00"
+                    required>
             </div>
-            <form id="priceForm">
-                <div class="form-group">
-                    <label for="itemPrice">Preço pago (R$):</label>
-                    <input type="number" id="itemPrice" step="0.01" min="0" placeholder="0,00" required>
-                </div>
             <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" id="cancelPrice">Cancelar</button>
+                <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
                 <button type="submit" class="btn btn-primary">Confirmar</button>
             </div>
         </form>

@@ -1,22 +1,30 @@
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    min-height: 100vh;
+/* src/app/app.component.scss */
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 100vh;
 }
 
-.btn {
-    padding: 12px 20px;
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-    min-height: 48px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
+/* Media queries para responsividade */
+@media (max-width: 1200px) {
+  .app-container {
+    max-width: 100%;
+    padding: 15px;
+  }
 }
 
+@media (max-width: 768px) {
+  .app-container {
+    gap: 15px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-container {
+    gap: 10px;
+    padding: 5px;
+  }
+}
