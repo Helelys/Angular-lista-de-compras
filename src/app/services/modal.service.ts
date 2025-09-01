@@ -1,7 +1,7 @@
 // src/app/services/modal.service.ts
 
 import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { ShoppingItem, Category } from '../model/shopping-list.model';
 
 export interface EditModalData {
@@ -10,70 +10,103 @@ export interface EditModalData {
   quantity: number;
 }
 
-export interface PriceModalData {
-  price: number;
+export interface EditModalState {
+  show: boolean;
+  item: ShoppingItem | null;
+  result?: EditModalData | null;
+}
+
+export interface PriceModalState {
+  show: boolean;
+  result?: number | null;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModalService {
-  private editModalSubject = new Subject<{ item: ShoppingItem, result: EditModalData | null }>();
-  private priceModalSubject = new Subject<PriceModalData | null>();
-  
+  // Para modal de edição
+  private editModalSubject = new BehaviorSubject<EditModalState>({ 
+    show: false, 
+    item: null 
+  });
   public editModal$ = this.editModalSubject.asObservable();
+  
+  // Para modal de preço
+  private priceModalSubject = new BehaviorSubject<PriceModalState>({ 
+    show: false 
+  });
   public priceModal$ = this.priceModalSubject.asObservable();
 
-  // Abre modal de edição
+  // Promises para controlar o fluxo async
+  private currentEditResolve: ((value: EditModalData | null) => void) | null = null;
+  private currentPriceResolve: ((value: number | null) => void) | null = null;
+
+  // === MODAL DE EDIÇÃO ===
   openEditModal(item: ShoppingItem): Promise<EditModalData | null> {
     return new Promise((resolve) => {
-      const subscription = this.editModal$.subscribe((data) => {
-        if (data.item.id === item.id) {
-          resolve(data.result);
-          subscription.unsubscribe();
-        }
-      });
+      this.currentEditResolve = resolve;
       
-      // Emite o item para ser editado
-      this.editModalSubject.next({ item, result: null });
+      // Emite estado para abrir o modal
+      this.editModalSubject.next({
+        show: true,
+        item: item
+      });
     });
   }
 
-  // Fecha modal de edição com dados
-  closeEditModal(item: ShoppingItem, data: EditModalData | null): void {
-    this.editModalSubject.next({ item, result: data });
+  closeEditModal(data: EditModalData | null): void {
+    // Fecha o modal
+    this.editModalSubject.next({
+      show: false,
+      item: null,
+      result: data
+    });
+    
+    // Resolve a Promise se existir
+    if (this.currentEditResolve) {
+      this.currentEditResolve(data);
+      this.currentEditResolve = null;
+    }
   }
 
-  // Abre modal de preço
+  // === MODAL DE PREÇO ===
   openPriceModal(): Promise<number | null> {
     return new Promise((resolve) => {
-      const subscription = this.priceModal$.subscribe((data) => {
-        resolve(data ? data.price : null);
-        subscription.unsubscribe();
-      });
+      this.currentPriceResolve = resolve;
       
-      // Emite sinal para abrir modal
-      this.priceModalSubject.next(null);
+      // Emite estado para abrir o modal
+      this.priceModalSubject.next({
+        show: true
+      });
     });
   }
 
-  // Fecha modal de preço com dados
   closePriceModal(price: number | null): void {
-    this.priceModalSubject.next(price !== null ? { price } : null);
+    // Fecha o modal
+    this.priceModalSubject.next({
+      show: false,
+      result: price
+    });
+    
+    // Resolve a Promise se existir
+    if (this.currentPriceResolve) {
+      this.currentPriceResolve(price);
+      this.currentPriceResolve = null;
+    }
   }
 
-  // Método para confirmação
+  // === MÉTODOS UTILITÁRIOS ===
   confirm(message: string): boolean {
     return confirm(message);
   }
 
-  // Método para exibir erro
   showError(message: string): void {
-    alert(message); // Pode ser substituído por toast/snackbar
+    alert('Erro: ' + message);
   }
 
-  // Método para exibir sucesso
   showSuccess(message: string): void {
-    console.log('Sucesso:', message); // Pode ser substituído por toast/snackbar
+    console.log('Sucesso:', message);
+    // Você pode substituir por um toast/snackbar mais elegante
   }
 }

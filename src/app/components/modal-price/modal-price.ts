@@ -21,12 +21,17 @@ export class ModalPrice implements OnInit, OnDestroy {
   constructor(private modalService: ModalService) {}
 
   ngOnInit(): void {
-    // Inscreve-se nos eventos de abertura do modal de preço
+    // Inscreve-se nos estados do modal de preço
     this.subscription.add(
-      this.modalService.priceModal$.subscribe(data => {
-        if (data === null) {
-          // Abre o modal
+      this.modalService.priceModal$.subscribe(state => {
+        console.log('ModalPrice recebeu estado:', state); // Debug
+        
+        if (state.show && !this.showModal) {
+          // Abre o modal apenas se não estiver já aberto
           this.openModal();
+        } else if (!state.show && this.showModal) {
+          // Fecha o modal apenas se estiver aberto
+          this.showModal = false;
         }
       })
     );
@@ -37,20 +42,35 @@ export class ModalPrice implements OnInit, OnDestroy {
   }
 
   private openModal(): void {
+    console.log('Abrindo modal de preço'); // Debug
     this.price = 0;
     this.showModal = true;
+    
+    // Foca no input de preço após um pequeno delay
+    setTimeout(() => {
+      const priceInput = document.getElementById('itemPrice') as HTMLInputElement;
+      if (priceInput) {
+        priceInput.focus();
+      }
+    }, 100);
   }
 
   onSubmit(event: Event): void {
     event.preventDefault();
+    console.log('Submetendo preço:', this.price); // Debug
+    
+    // Valida o preço
+    if (this.price < 0) {
+      alert('O preço não pode ser negativo');
+      return;
+    }
     
     this.modalService.closePriceModal(this.price);
-    this.closeModal();
   }
 
   onCancel(): void {
+    console.log('Cancelando modal de preço'); // Debug
     this.modalService.closePriceModal(null);
-    this.closeModal();
   }
 
   onClose(): void {
@@ -61,10 +81,5 @@ export class ModalPrice implements OnInit, OnDestroy {
     if (event.target === event.currentTarget) {
       this.onCancel();
     }
-  }
-
-  private closeModal(): void {
-    this.showModal = false;
-    this.price = 0;
   }
 }
