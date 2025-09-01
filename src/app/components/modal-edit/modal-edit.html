@@ -1,0 +1,34 @@
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Item</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="editItemForm">
+                <div class="form-group">
+                    <label for="editItemName">Nome:</label>
+                    <input type="text" id="editItemName" maxlength="50" required>
+                </div>
+                <div class="form-group">
+                    <label for="editItemCategory">Categoria:</label>
+                    <select id="editItemCategory" required>
+                        <option value="Frutas e Verduras">Frutas e Verduras</option>
+                        <option value="Carnes">Carnes</option>
+                        <option value="Laticínios">Laticínios</option>
+                        <option value="Padaria">Padaria</option>
+                        <option value="Limpeza">Limpeza</option>
+                        <option value="Higiene">Higiene</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editItemQuantity">Quantidade:</label>
+                    <input type="number" id="editItemQuantity" min="1" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelEdit">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
